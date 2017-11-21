@@ -1,4 +1,4 @@
-FROM fluent/fluent-bit:0.11
+FROM fluent/fluent-bit:0.12.8
 USER root
 COPY etc /fluent-bit/etc/
 COPY out_sls.so /fluent-bit/
