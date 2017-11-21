@@ -15,19 +15,30 @@ import (
 
 var project *sls.LogProject
 var logstore *sls.LogStore
+var accessKey, accessKeySecret, projectName, endpoint, logstoreName string
 
 //export FLBPluginInit
 func FLBPluginInit(ctx unsafe.Pointer) int {
+	accessKey = output.FLBPluginConfigKey(ctx, "accessKey")
+	accessKeySecret = output.FLBPluginConfigKey(ctx, "accessKeySecret")
+	projectName = output.FLBPluginConfigKey(ctx, "projectName")
+	endpoint = output.FLBPluginConfigKey(ctx, "endpoint")
+	logstoreName = output.FLBPluginConfigKey(ctx, "logstoreName")
 	return FLBPluginRegister(ctx)
 }
 
 //export FLBPluginRegister
 func FLBPluginRegister(ctx unsafe.Pointer) int {
-	accessKey := os.Getenv("ALIYUN_ACCESS_KEY")
-	accessKeySecret := os.Getenv("ALIYUN_ACCESS_KEY_SECRET")
-	projectName := os.Getenv("ALIYUN_SLS_PROJECT")
-	endpoint := os.Getenv("ALIYUN_SLS_ENDPOINT")
-	logstoreName := os.Getenv("ALIYUN_SLS_LOGSTORE")
+	if accessKey == "":
+		accessKey = os.Getenv("ALIYUN_ACCESS_KEY")
+	if accessKeySecret == "":
+		accessKeySecret = os.Getenv("ALIYUN_ACCESS_KEY_SECRET")
+	if projectName == ""
+		projectName = os.Getenv("ALIYUN_SLS_PROJECT")
+	if endpoint == "":
+		endpoint = os.Getenv("ALIYUN_SLS_ENDPOINT")
+	if logstoreName == "":
+	logstoreName = os.Getenv("ALIYUN_SLS_LOGSTORE")
 
 	project = &sls.LogProject{
 		Name:            projectName,

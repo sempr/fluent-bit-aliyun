@@ -1,7 +1,7 @@
 machine:
   environment:
-    DOCKER_IMAGE_NAME: kubeup/fluent-bit-aliyun
-    USER: kubeup
+    DOCKER_IMAGE_NAME: sempr/fluent-bit-aliyun
+    USER: sempr
     REPO: fluent-bit-aliyun
   pre:
     - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.1-circleci'
@@ -16,10 +16,10 @@ dependencies:
   pre:
     - docker info
   override:
-    - mkdir -p $HOME/.go_workspace/src/github.com/kubeup
-    - ln -sf $HOME/$CIRCLE_PROJECT_REPONAME $HOME/.go_workspace/src/github.com/kubeup/$CIRCLE_PROJECT_REPONAME
+    - mkdir -p $HOME/.go_workspace/src/github.com/sempr
+    - ln -sf $HOME/$CIRCLE_PROJECT_REPONAME $HOME/.go_workspace/src/github.com/sempr/$CIRCLE_PROJECT_REPONAME
     - glide install
-    - go build -buildmode=c-shared -o out_sls.so github.com/kubeup/fluent-bit-aliyun
+    - go build -buildmode=c-shared -o out_sls.so github.com/sempr/fluent-bit-aliyun
     - cp out_sls.so docker-image/
     - |
       if [ -n "$CIRCLE_TAG" ]; then
@@ -32,18 +32,18 @@ dependencies:
 
 test:
   override:
-    - go test github.com/kubeup/fluent-bit-aliyun
+    - go test github.com/sempr/fluent-bit-aliyun
 
 deployment:
   hub_branch:
     branch: master
-    owner: kubeup
+    owner: sempr
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
       - docker push $DOCKER_IMAGE_NAME
   hub_tag:
     tag: /^v[0-9]+(\.[0-9]+){2}(-.+|[^-.]*)$/
-    owner: kubeup
+    owner: sempr
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
       - docker push $DOCKER_IMAGE_NAME
